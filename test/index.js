@@ -32,6 +32,39 @@ function* move() {
   t.end()
 })
 
+test('should add yield at depth 2', (t) => {
+  var code = autoYield(`
+  function main () {
+    square()
+  }
+
+  function square () {
+    move()
+    move()
+  }
+
+  function * move () {
+    yield 'moving'
+  }
+  `)
+
+  var out = `function* main() {
+  yield square();
+}
+
+function* square() {
+  yield move();
+  yield move();
+}
+
+function* move() {
+  yield 'moving';
+}`
+
+  t.equal(code, out)
+  t.end()
+})
+
 test('should add yield for imported', (t) => {
   var code = autoYield(`
   var move = require('move')

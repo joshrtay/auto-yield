@@ -6,7 +6,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Code style][standard-image]][standard-url]
 
-Automatically add yields and generators.
+Automatically add yield to generator calls.
 
 ## Installation
 
@@ -17,15 +17,34 @@ Automatically add yields and generators.
 ```js
 var autoYield = require('auto-yield')
 
+var code = autoYield(`
+function main () {
+  move()
+}
+
+function * move () {
+  yield 'moving'
+}
+`) =>
+
+`function* main() {
+yield move();
+}
+
+function* move() {
+yield 'moving';
+}`
+
 ```
 
 ## API
 
-### autoYield(arg)
+### autoYield(code, globalGens)
 
-- `arg` -
+- `code` - code to transform
+- `globalGens` - array of global names or object names that are generators or have generators
 
-**Returns:**
+**Returns:** transformed code
 
 ## License
 

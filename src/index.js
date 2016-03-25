@@ -10,8 +10,9 @@ var camelCase = require('camel-case')
 
 function autoYield(code, generatorNames) {
   generatorNames = generatorNames || []
+  const it = {CallExpression}
   var result = babel.transform(code, {
-    plugins: [{visitor: {CallExpression}}]
+    plugins: [{visitor: it}]
   })
   return result.code
 
@@ -25,6 +26,7 @@ function autoYield(code, generatorNames) {
       }
       if (!parent.node.generator) {
         parent.replaceWith(babel.types[camelCase(parent.node.type)](parent.node.id, parent.node.params, parent.node.body, true))
+        parent.parentPath.traverse(it)
       }
     }
   }
