@@ -5,6 +5,9 @@
 var babel = require('babel-core')
 var camelCase = require('camel-case')
 
+/**
+ * Expose auto yield
+ */
 
 module.exports = autoYield
 
@@ -16,7 +19,7 @@ function autoYield(code, generatorNames, secondOrderGens) {
   generatorNames = generatorNames || []
   secondOrderGens = secondOrderGens || []
 
-  var it = {CallExpression: CallExpression, VariableDeclarator: VariableDeclarator}
+  var it = {CallExpression, VariableDeclarator}
   var result = babel.transform(code, {
     plugins: [{visitor: it}]
   })

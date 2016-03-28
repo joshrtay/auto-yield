@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "babel-core": "^6.7.4",
-    "babel-standalone": "^6.7.4",
     "camel-case": "^1.2.2"
   },
   "devDependencies": {
