@@ -85,6 +85,28 @@ function* main() {
   t.end()
 })
 
+test('should add yield for imported second order gen function', (t) => {
+  var code = autoYield(`
+  var move = require('move')
+  var steer = move('a', 'b')
+
+  function main () {
+    steer.rotate()
+  }
+  `, [], ['move'])
+
+  var out = `
+var move = require('move');
+var steer = move('a', 'b');
+
+function* main() {
+  yield steer.rotate();
+}`
+
+  t.equal(code, out)
+  t.end()
+})
+
 
 test('should add yield for imported objects', (t) => {
   var code = autoYield(`

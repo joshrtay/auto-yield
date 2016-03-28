@@ -8,9 +8,10 @@ var camelCase = require('camel-case')
  * auto-yield
  */
 
-function autoYield(code, generatorNames) {
+function autoYield(code, generatorNames, secondOrderGens) {
   generatorNames = generatorNames || []
-  const it = {CallExpression}
+  secondOrderGens = secondOrderGens || []
+  const it = {CallExpression, VariableDeclarator}
   var result = babel.transform(code, {
     plugins: [{visitor: it}]
   })
@@ -18,15 +19,24 @@ function autoYield(code, generatorNames) {
 
 
   function CallExpression (path) {
+
     var parent = path.parentPath
     if (parent.node.type !== 'YieldExpression' && isGenerator(path.node.callee, path.scope)) {
       path.replaceWith(babel.types.yieldExpression(path.node))
-      while (parent.node.type !== 'FunctionExpression' && parent.node.type !== 'FunctionDeclaration') {
+      while (parent && parent.node.type !== 'FunctionExpression' && parent.node.type !== 'FunctionDeclaration') {
         parent = parent.parentPath
       }
-      if (!parent.node.generator) {
+      if (parent && !parent.node.generator) {
         parent.replaceWith(babel.types[camelCase(parent.node.type)](parent.node.id, parent.node.params, parent.node.body, true))
         parent.parentPath.traverse(it)
+      }
+    }
+  }
+
+  function VariableDeclarator (path) {
+    if (path.node.init.callee && secondOrderGens.indexOf(path.node.init.callee.name) >= 0) {
+      if (generatorNames.indexOf(path.node.id.name) === -1) {
+        generatorNames.push(path.node.id.name)
       }
     }
   }
