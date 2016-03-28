@@ -4,6 +4,10 @@
 
 var babel = require('babel-core')
 var camelCase = require('camel-case')
+
+
+module.exports = autoYield
+
 /**
  * auto-yield
  */
@@ -11,7 +15,8 @@ var camelCase = require('camel-case')
 function autoYield(code, generatorNames, secondOrderGens) {
   generatorNames = generatorNames || []
   secondOrderGens = secondOrderGens || []
-  const it = {CallExpression, VariableDeclarator}
+
+  var it = {CallExpression: CallExpression, VariableDeclarator: VariableDeclarator}
   var result = babel.transform(code, {
     plugins: [{visitor: it}]
   })
@@ -73,12 +78,3 @@ function autoYield(code, generatorNames, secondOrderGens) {
 
 
 }
-
-
-
-
-/**
- * Exports
- */
-
-export default autoYield

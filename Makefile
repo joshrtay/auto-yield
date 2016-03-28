@@ -23,7 +23,8 @@ clean:
 	@rm -rf lib
 
 build: clean
-	babel src --out-dir lib
+	@mkdir lib
+	@browserify src/index.js --o lib/index.js -s autoYield
 
 all: validate test
 
