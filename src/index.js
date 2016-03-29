@@ -69,7 +69,7 @@ function autoYield(code, generatorNames, secondOrderGens) {
   function isMethodGenerator (objectName, propertyName, scope) {
     scope = findBindingScope(objectName, scope)
     //XXX add real support for methods
-    return !scope.parent && generatorNames.indexOf(objectName) >= 0
+    return scope && !scope.parent && generatorNames.indexOf(objectName) >= 0
   }
 
   function findBindingScope (name, scope) {
