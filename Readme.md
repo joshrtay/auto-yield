@@ -6,7 +6,7 @@
 [![NPM version][npm-image]][npm-url]
 [![Code style][standard-image]][standard-url]
 
-Automatically add yield to generator calls.
+Automatically add yield to generator calls, making asynchronous programming easier for beginners.
 
 ## Installation
 
